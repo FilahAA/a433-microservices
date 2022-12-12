@@ -17,4 +17,4 @@ RUN npm install --production --unsafe-perm && npm run build
 EXPOSE 8080
 
 # mengeksekusi perintah npm start untuk menjalankan aplikasi pada shell
-CMD ["node", "start"]
+CMD ["npm", "start"]
