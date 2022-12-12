@@ -1,5 +1,5 @@
 # mengunduh/mengambil base image bernama node dari Docker Hub dengan tag 12-alpine
-FROM node:14-bullseye
+FROM node:14.21.1-alpine3.16
 
 # membuat directory baru bernama app di dalam container dan menjadikannya sebagai working directory
 WORKDIR /app
