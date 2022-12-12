@@ -1,4 +1,4 @@
-# mengunduh/mengambil base image bernama node dari Docker Hub dengan tag 12-alpine
+# mengunduh/mengambil base image bernama node dari Docker Hub dengan tag 14.21.1-alpine3.16
 FROM node:14.21.1-alpine3.16
 
 # membuat directory baru bernama app di dalam container dan menjadikannya sebagai working directory
