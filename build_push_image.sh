@@ -7,7 +7,7 @@ docker build -t item-app:v1 .
 docker images
 
 # mengubah nama image agar sesuai dengan format Github Packages
-docker tag item-app:v1 filahaa/item-app:v1
+docker tag item-app:v1 ghcr.io/filahaa/item-app:v1
 
 # login ke Github Packages untuk keamanan saya menggunakan Token
 echo $TOKEN_GITHUB | docker login ghcr.io -u filahaa --password-stdin
