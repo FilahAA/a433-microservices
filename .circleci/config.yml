@@ -5,6 +5,10 @@ executors:
       - image: docker:stable
 jobs:
   lint-dockerfile:
+    filters:
+      branches:
+        only:
+          - karsajobs
     executor: docker
     steps:
       - checkout
@@ -14,6 +18,10 @@ jobs:
           command: |
             docker run --rm --interactive hadolint/hadolint < Dockerfile
   test-app:
+    filters:
+      branches:
+        only:
+          - karsajobs
     docker:
       - image: golang:1.15-alpine
     steps:
@@ -24,6 +32,10 @@ jobs:
           command: |
             go test -v -short --count=1 $(go list ./...)
   build-app-karsajobs:
+    filters:
+      branches:
+        only:
+          - karsajobs
     executor: docker
     steps:
       - checkout
