@@ -5,6 +5,10 @@ executors:
       - image: docker:stable
 jobs:
   lint-dockerfile:
+    filters:
+      branches:
+        only:
+          - karsajobs-ui
     executor: docker
     steps:
       - checkout
@@ -14,6 +18,10 @@ jobs:
           command: |
             docker run --rm --interactive hadolint/hadolint < Dockerfile
   build-app-karsajobs-ui:
+    filters:
+      branches:
+        only:
+          - karsajobs-ui
     executor: docker
     steps:
       - checkout
