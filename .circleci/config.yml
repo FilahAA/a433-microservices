@@ -52,7 +52,7 @@ workflows:
                 - karsajobs
   build-app-karsajobs:
     jobs:
-      - build-app-karsajobs
+      - build-app-karsajobs:
           filters:
             branches:
               only:
