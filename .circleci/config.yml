@@ -1,15 +1,7 @@
 version: '2.1'
-executors:
-  docker:
-    docker:
-      - image: docker:stable
 jobs:
   lint-dockerfile:
-    filters:
-      branches:
-        only:
-          - karsajobs
-    executor: docker
+    executor: docker:stable
     steps:
       - checkout
       - setup_remote_docker
@@ -18,10 +10,6 @@ jobs:
           command: |
             docker run --rm --interactive hadolint/hadolint < Dockerfile
   test-app:
-    filters:
-      branches:
-        only:
-          - karsajobs
     docker:
       - image: golang:1.15-alpine
     steps:
@@ -32,11 +20,7 @@ jobs:
           command: |
             go test -v -short --count=1 $(go list ./...)
   build-app-karsajobs:
-    filters:
-      branches:
-        only:
-          - karsajobs
-    executor: docker
+    executor: docker:stable
     steps:
       - checkout
       - setup_remote_docker
@@ -47,15 +31,29 @@ jobs:
       - run:
           name: Push Docker image
           command: |
+            echo $TOKEN_GITHUB_PACKAGES | docker login ghcr.io -u filahaa --password-stdin
             docker tag karsajobs:latest ghcr.io/filahaa/karsajobs:latest
             docker push ghcr.io/filahaa/karsajobs:latest
+
 workflows:
   lint-dockerfile:
     jobs:
-      - lint-dockerfile
+      - lint-dockerfile:
+          filters:
+            branches:
+              only:
+                - karsajobs
   test-app:
     jobs:
-      - test-app
+      - test-app:
+          filters:
+            branches:
+              only:
+                - karsajobs
   build-app-karsajobs:
     jobs:
       - build-app-karsajobs
+          filters:
+            branches:
+              only:
+                - karsajobs
