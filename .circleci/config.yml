@@ -7,7 +7,12 @@ jobs:
       # replace with your preferred image
       - image: cimg/base:stable
     steps:
-      - docker/hadolint
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Run tests
+          command: |
+            docker run --rm --interactive hadolint/hadolint < Dockerfile
   test-app:
     docker:
       - image: cimg/go:1.19.4
@@ -23,23 +28,18 @@ jobs:
       # replace with your preferred image
       - image: cimg/base:stable
     steps:
-      - docker/build:
-          debug: false 
-          image: karsajobs 
-          lint-dockerfile: true 
-          registry: ghcr.io 
-          tag: latest 
-          treat-warnings-as-errors: false 
-          use-buildkit: false
-      - docker/check:
-          use-docker-credentials-store: false 
-          registry: ghcr.io 
-          docker-password: GITHUB_TOKEN 
-          docker-username: GITHUB_USERNAME
-      - docker/push:
-          image: karsajobs 
-          registry: ghcr.io 
-          tag: latest
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t karsajobs:latest .
+      - run:
+          name: Push Docker image
+          command: |
+            echo $TOKEN_GITHUB_PACKAGES | docker login ghcr.io -u filahaa --password-stdin
+            docker tag karsajobs:latest ghcr.io/filahaa/karsajobs:latest
+            docker push ghcr.io/filahaa/karsajobs:latest
 
 workflows:
     lint-dockerfile:
