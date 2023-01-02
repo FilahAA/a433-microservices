@@ -26,7 +26,7 @@ jobs:
           name: Push Docker image
           command: |
             echo $TOKEN_GITHUB_PACKAGES | docker login ghcr.io -u filahaa --password-stdin
-            docker tag karsajobs:latest ghcr.io/filahaa/karsajobs-ui:latest
+            docker tag karsajobs-ui:latest ghcr.io/filahaa/karsajobs-ui:latest
             docker push ghcr.io/filahaa/karsajobs-ui:latest
 
 workflows:
