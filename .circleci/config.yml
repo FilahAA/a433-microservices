@@ -9,8 +9,17 @@ jobs:
           name: Linting Dockerfiles with Hadolint
           command: |
             docker run --rm --interactive hadolint/hadolint < Dockerfile
-
-  build-app-karsajobs-ui:
+  test-app:
+    docker:
+      - image: golang:1.15-alpine
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Run tests
+          command: |
+            go test -v -short --count=1 $(go list ./...)
+  build-app-karsajobs:
     executor: docker:stable
     steps:
       - checkout
@@ -23,8 +32,8 @@ jobs:
           name: Push Docker image
           command: |
             echo $TOKEN_GITHUB_PACKAGES | docker login ghcr.io -u filahaa --password-stdin
-            docker tag karsajobs:latest ghcr.io/filahaa/karsajobs-ui:latest
-            docker push ghcr.io/filahaa/karsajobs-ui:latest
+            docker tag karsajobs:latest ghcr.io/filahaa/karsajobs:latest
+            docker push ghcr.io/filahaa/karsajobs:latest
 
 workflows:
   lint-dockerfile:
@@ -33,7 +42,18 @@ workflows:
           filters:
             branches:
               only:
-                - karsajobs-ui
-  build-app-karsajobs-ui:
+                - karsajobs
+  test-app:
     jobs:
-      - build-app-karsajobs-ui
+      - test-app:
+          filters:
+            branches:
+              only:
+                - karsajobs
+  build-app-karsajobs:
+    jobs:
+      - build-app-karsajobs
+          filters:
+            branches:
+              only:
+                - karsajobs
