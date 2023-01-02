@@ -10,8 +10,7 @@ jobs:
           command: |
             docker run --rm --interactive hadolint/hadolint < Dockerfile
   test-app:
-    docker:
-      - image: golang:1.15-alpine
+    executor: golang:1.15-alpine
     steps:
       - checkout
       - setup_remote_docker
