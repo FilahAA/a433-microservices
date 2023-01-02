@@ -1,9 +1,7 @@
 version: '2.1'
-
-
 jobs:
   lint-dockerfile:
-    executor: docker:stable
+    executor: docker
     steps:
       - checkout
       - setup_remote_docker
@@ -12,7 +10,7 @@ jobs:
           command: |
             docker run --rm --interactive hadolint/hadolint < Dockerfile
   build-app-karsajobs-ui:
-    executor: docker:stable
+    executor: docker
     steps:
       - checkout
       - setup_remote_docker
