@@ -1,23 +1,27 @@
 version: '2.1'
+orbs:
+  docker: circleci/docker@2.2.0
 jobs:
   lint-dockerfile:
-    executor: docker
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
       - setup_remote_docker
       - run:
-          name: Linting Dockerfiles with Hadolint
+          name: Run tests
           command: |
             docker run --rm --interactive hadolint/hadolint < Dockerfile
   build-app-karsajobs-ui:
-    executor: docker
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
       - setup_remote_docker
       - run:
           name: Build Docker image
           command: |
-            docker build -t karsajobs-ui:latest .
+            docker build -t karsajobs:latest .
       - run:
           name: Push Docker image
           command: |
@@ -26,17 +30,17 @@ jobs:
             docker push ghcr.io/filahaa/karsajobs-ui:latest
 
 workflows:
-  lint-dockerfile:
-    jobs:
-      - lint-dockerfile:
-          filters:
-            branches:
-              only:
-                - karsajobs-ui
-  build-app-karsajobs-ui:
-    jobs:
-      - build-app-karsajobs-ui:
-          filters:
-            branches:
-              only:
-                - karsajobs-ui
+    lint-dockerfile:
+      jobs:
+        - lint-dockerfile:
+            filters:
+              branches:
+                only:
+                  - karsajobs-ui
+    build-app-karsajobs-ui:
+      jobs:
+        - build-app-karsajobs:
+            filters:
+              branches:
+                only:
+                  - karsajobs-ui
