@@ -4,7 +4,6 @@ orbs:
 jobs:
   lint-dockerfile:
     docker:
-      # replace with your preferred image
       - image: cimg/base:stable
     steps:
       - checkout
@@ -25,7 +24,6 @@ jobs:
             go test -v -short --count=1 $(go list ./...)
   build-app-karsajobs:
     docker:
-      # replace with your preferred image
       - image: cimg/base:stable
     steps:
       - checkout
